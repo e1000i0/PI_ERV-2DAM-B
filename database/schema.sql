@@ -24,9 +24,10 @@ CREATE TABLE prendas (
     color VARCHAR(50),
     talla VARCHAR(30),
     marca VARCHAR(80),
-    temporada ENUM('primavera', 'verano', 'otono', 'invierno', 'todo_el_ano') DEFAULT 'todo_el_ano',
     estado ENUM('en_uso', 'poco_usada', 'para_vender', 'vendida', 'para_donar', 'donada') DEFAULT 'en_uso',
-    imagen_url VARCHAR(255),
+    -- Clave del objeto en el almacenamiento S3 (p. ej. usuarios/42/prendas/<uuid>.webp), no una URL:
+    -- permite cambiar de proveedor o anadir una CDN sin tocar los datos.
+    imagen_clave VARCHAR(255),
     precio_compra DECIMAL(10, 2),
     fecha_alta DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_usuario BIGINT NOT NULL,
@@ -60,12 +61,25 @@ CREATE TABLE prenda_etiqueta (
         ON UPDATE CASCADE
 );
 
+-- Una prenda puede valer para varias temporadas: una fila por temporada.
+-- Una prenda de todo el ano tiene las cuatro filas.
+CREATE TABLE prenda_temporada (
+    id_prenda BIGINT NOT NULL,
+    temporada ENUM('primavera', 'verano', 'otono', 'invierno') NOT NULL,
+    PRIMARY KEY (id_prenda, temporada),
+    CONSTRAINT fk_prenda_temporada_prendas
+        FOREIGN KEY (id_prenda) REFERENCES prendas(id_prenda)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+-- La temporada de un outfit no se guarda: se calcula a partir de sus prendas
+-- (temporadas comunes a todas ellas).
 CREATE TABLE outfits (
     id_outfit BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(120) NOT NULL,
     descripcion TEXT,
     ocasion VARCHAR(80),
-    temporada ENUM('primavera', 'verano', 'otono', 'invierno', 'todo_el_ano') DEFAULT 'todo_el_ano',
     favorito BOOLEAN NOT NULL DEFAULT FALSE,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_usuario BIGINT NOT NULL,
@@ -106,6 +120,7 @@ CREATE TABLE uso_prenda (
 
 CREATE INDEX idx_prendas_usuario ON prendas(id_usuario);
 CREATE INDEX idx_prendas_categoria ON prendas(id_categoria);
+CREATE INDEX idx_prenda_temporada_temporada ON prenda_temporada(temporada);
 CREATE INDEX idx_outfits_usuario ON outfits(id_usuario);
 CREATE INDEX idx_uso_prenda_prenda ON uso_prenda(id_prenda);
 CREATE INDEX idx_uso_prenda_outfit ON uso_prenda(id_outfit);

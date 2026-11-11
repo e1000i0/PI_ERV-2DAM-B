@@ -29,7 +29,7 @@ Mucha gente acumula ropa que apenas usa, compra por impulso y no recuerda todo l
 | Frontend | Ionic + Angular + Capacitor (APK Android y PWA) |
 | Backend | Spring Boot · API REST · JWT · Swagger/OpenAPI |
 | Base de datos | MySQL / MariaDB |
-| DevOps | Docker · GitHub Actions |
+| DevOps | Docker · GitHub Actions · MinIO (almacenamiento de imágenes compatible con S3) |
 | Gestión | Scrum (sprints de 2 semanas) · GitHub Projects |
 
 ## Arquitectura
@@ -58,29 +58,41 @@ Diagrama completo: [`docs/DIAGRAMA_ARQUITECTURA.png`](docs/DIAGRAMA_ARQUITECTURA
 
 ## Modelo de datos
 
-Ocho tablas: `usuarios`, `categorias`, `prendas`, `etiquetas`, `prenda_etiqueta`, `outfits`, `outfit_prenda` y `uso_prenda`.
+Nueve tablas: `usuarios`, `categorias`, `prendas`, `prenda_temporada`, `etiquetas`, `prenda_etiqueta`, `outfits`, `outfit_prenda` y `uso_prenda`.
 
-La tabla `uso_prenda` guarda cada vez que se usa una prenda (y en qué outfit). Es la base de las estadísticas de uso y de la detección de ropa olvidada.
+Una prenda puede valer para varias temporadas: `prenda_temporada` guarda una fila por temporada (una prenda de todo el año tiene las cuatro). La temporada de un outfit no se guarda, se calcula a partir de sus prendas.
+
+La tabla `uso_prenda` guarda cada vez que se usa una prenda (y en qué outfit). Es la base de la detección de ropa olvidada.
 
 - Script: [`database/schema.sql`](database/schema.sql)
 - Diagrama E-R: [`docs/DIAGRAMA_ER_BBDD.png`](docs/DIAGRAMA_ER_BBDD.png)
 
 ## Planificación
 
-| Sprint | Contenido | Fechas |
+Scrum con sprints de 2 semanas lectivas. El desarrollo termina en abril; mayo se reserva para la memoria y la defensa.
+
+| Sprint | Fechas | Objetivo |
 | --- | --- | --- |
-| 0 | Requisitos, MVP, arquitectura y modelo de datos | Oct–nov 2026 ✅ |
-| 1 | Backend base, usuarios y JWT | Nov–dic 2026 |
-| 2 | Prendas y categorías | Dic 2026–ene 2027 |
-| 3 | App móvil base y armario virtual | Ene–feb 2027 |
-| 4 | Outfits, filtros y etiquetas | Feb–mar 2027 |
-| 5 | Uso de prendas, estadísticas y prendas poco usadas | Mar–abr 2027 |
-| 6 | Integración, pruebas y correcciones | Abr 2027 |
-| — | Memoria, presentación y defensa | Mayo 2027 |
+| 0 | Oct–nov 2026 | Requisitos, MVP, arquitectura y modelo de datos ✅ |
+| S1 | 16/11 – 29/11/2026 | Repositorio, Docker, CI y esqueleto de la API |
+| S2 | 30/11 – 13/12/2026 | Registro, login y JWT |
+| S3 | 14/12/2026 – 17/01/2027 | Cierre de autenticación y seguridad de rutas (incluye Navidad) |
+| S4 | 18/01 – 31/01/2027 | CRUD de categorías y prendas con temporadas |
+| S5 | 01/02 – 14/02/2027 | Imágenes en MinIO; app Ionic: login y navegación |
+| S6 | 15/02 – 28/02/2027 | Armario virtual: listado y ficha de prenda |
+| S7 | 01/03 – 14/03/2027 | Alta de prenda con foto; filtros |
+| S8 | 15/03 – 04/04/2027 | Outfits (incluye Semana Santa) |
+| S9 | 05/04 – 18/04/2027 | Registro de uso y prendas olvidadas |
+| S10 | 19/04 – 02/05/2027 | Despliegue en sandbox, pruebas y correcciones |
+| — | Mayo 2027 | Memoria final, presentación y defensa |
 
 ## Estado
 
-🟡 **Fase de diseño completada.** Documentación, arquitectura y modelo de datos listos; desarrollo del backend en curso.
+🟡 **Fase de diseño completada.** Documentación, arquitectura y modelo de datos listos. El código del backend y del frontend empieza en el Sprint S1 (16/11/2026).
+
+## Licencia
+
+[MIT](LICENSE)
 
 ## Documentación
 
