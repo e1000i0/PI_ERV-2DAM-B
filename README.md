@@ -29,7 +29,7 @@ Mucha gente acumula ropa que apenas usa, compra por impulso y no recuerda todo l
 | Frontend | Ionic + Angular + Capacitor (APK Android y PWA) |
 | Backend | Spring Boot · API REST · JWT · Swagger/OpenAPI |
 | Base de datos | MySQL / MariaDB |
-| DevOps | Docker · GitHub Actions · MinIO (almacenamiento de imágenes compatible con S3) |
+| DevOps | Docker · GitHub Actions · Garage (almacenamiento de imágenes compatible con S3) |
 | Gestión | Scrum (sprints de 2 semanas) · GitHub Projects |
 
 ## Arquitectura
@@ -78,7 +78,7 @@ Scrum con sprints de 2 semanas lectivas. El desarrollo termina en abril; mayo se
 | S2 | 30/11 – 13/12/2026 | Registro, login y JWT |
 | S3 | 14/12/2026 – 17/01/2027 | Cierre de autenticación y seguridad de rutas (incluye Navidad) |
 | S4 | 18/01 – 31/01/2027 | CRUD de categorías y prendas con temporadas |
-| S5 | 01/02 – 14/02/2027 | Imágenes en MinIO; app Ionic: login y navegación |
+| S5 | 01/02 – 14/02/2027 | Imágenes en almacenamiento S3; app Ionic: login y navegación |
 | S6 | 15/02 – 28/02/2027 | Armario virtual: listado y ficha de prenda |
 | S7 | 01/03 – 14/03/2027 | Alta de prenda con foto; filtros |
 | S8 | 15/03 – 04/04/2027 | Outfits (incluye Semana Santa) |
