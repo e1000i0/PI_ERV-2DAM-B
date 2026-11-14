@@ -88,7 +88,7 @@ Scrum con sprints de 2 semanas lectivas. El desarrollo termina en abril; mayo se
 
 ## Estado
 
-🟡 **Fase de diseño completada.** Documentación, arquitectura y modelo de datos listos. El código del backend y del frontend empieza en el Sprint S1 (16/11/2026).
+🟡 **Fase de diseño completada.** Documentación, arquitectura y modelo de datos listos. Sprint S1 en curso: ya hay esqueleto de la API (Spring Boot y comprobación de salud), entorno con Docker Compose (API, MySQL y Garage) y verificación en GitHub Actions.
 
 ## Licencia
 
@@ -100,4 +100,48 @@ Scrum con sprints de 2 semanas lectivas. El desarrollo termina en abril; mayo se
 
 ## Cómo ejecutarlo
 
-*Se completará cuando esté listo el Sprint 1.* Objetivo: `docker compose up` levanta la API y la base de datos.
+### Requisitos
+
+- Git.
+- Docker con Docker Compose v2 (Docker Desktop en Windows y macOS).
+- Bash para el script de Garage (Git Bash en Windows).
+- Para compilar y probar la API sin Docker: JDK 21 (por ejemplo, Eclipse Temurin 21) con `JAVA_HOME` apuntando a él.
+
+### Levantar la API, MySQL y Garage
+
+```bash
+git clone https://github.com/e1000i0/PI_ERV-2DAM-B.git
+cd PI_ERV-2DAM-B
+cp .env.example .env
+```
+
+Edita `.env` y sustituye los valores de ejemplo. Puedes generar los secretos con `openssl rand -hex 32` (secreto de Garage y clave secreta S3) y `openssl rand -hex 12` (contraseñas de MySQL). El identificador de la clave S3 es `GK` seguido de 24 caracteres hexadecimales. `.env` no se sube al repositorio.
+
+```bash
+docker compose up -d --build
+./docker/garage/init.sh
+```
+
+El segundo comando crea el bucket de imágenes y la clave S3 en Garage; se puede repetir sin problema.
+
+Comprobaciones:
+
+```bash
+curl http://localhost:8080/actuator/health
+```
+
+Debe responder `{"groups":["liveness","readiness"],"status":"UP"}`. MySQL queda en `127.0.0.1:3306` con las nueve tablas de `database/schema.sql`, y el almacenamiento S3 de Garage en `http://127.0.0.1:3900`. Los puertos solo se publican en el propio equipo.
+
+Para parar los servicios: `docker compose down`. Los datos se conservan en volúmenes; `docker compose down -v` los borra.
+
+### Compilar y probar la API
+
+Desde `backend/`, con Java 21:
+
+| Acción | Windows | Linux o macOS |
+| --- | --- | --- |
+| Compilar y verificar | `.\mvnw.cmd verify` | `./mvnw verify` |
+| Ejecutar pruebas | `.\mvnw.cmd test` | `./mvnw test` |
+| Arrancar la API | `.\mvnw.cmd spring-boot:run` | `./mvnw spring-boot:run` |
+
+GitHub Actions ejecuta `./mvnw verify` con Java 21 en cada pull request a `main`.
