@@ -1,0 +1,15 @@
+# Variables de entorno locales
+.env
+.env.*
+!.env.example
+
+# Salida de compilación de Maven
+/backend/target/
+
+# Configuración local del editor
+.idea/
+.vscode/
+
+# Registros y archivos del sistema
+*.log
+Thumbs.db
