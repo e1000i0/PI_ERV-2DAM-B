@@ -28,7 +28,7 @@ Mucha gente acumula ropa que apenas usa, compra por impulso y no recuerda todo l
 | --- | --- |
 | Frontend | Ionic + Angular + Capacitor (APK Android y PWA) |
 | Backend | Spring Boot · API REST · JWT · Swagger/OpenAPI |
-| Base de datos | MySQL / MariaDB |
+| Base de datos | MySQL 8.4 LTS |
 | DevOps | Docker · GitHub Actions · Garage (almacenamiento de imágenes compatible con S3) |
 | Gestión | Scrum (sprints de 2 semanas) · GitHub Projects |
 
@@ -45,7 +45,7 @@ flowchart TD
     API --> OUTFITS[Outfits]
     API --> RECS[Recomendaciones]
     API --> FILES[Imágenes]
-    CLOTHES --> DB[(MySQL / MariaDB)]
+    CLOTHES --> DB[(MySQL 8.4 LTS)]
     OUTFITS --> DB
     RECS --> DB
     FILES --> STORAGE[Almacenamiento de imágenes]
